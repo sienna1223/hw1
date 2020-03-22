@@ -6,6 +6,7 @@ class App extends Component {
   state = {
     userName : '',
     password : '',
+    email : '',
     list : [],
     validation : false
   };
@@ -26,10 +27,12 @@ class App extends Component {
       list : this.state.list.concat({
         userName : this.state.userName,
         password : this.state.password,
+        email : this.state.email,
         id : this.id
       }),
       userName : '',
-      password : ''
+      password : '',
+      email : ''
     });
     this.id++;
   };
@@ -38,31 +41,27 @@ class App extends Component {
     //비번이 6자리 이상
     //username을 포함하고 있지 않음
     //알파벳 대소문자 각각 하나 이상
+    //이메일 @ 포함
     const rule1 = this.state.password.length >= 6 ;
     const rule2 = !this.state.password.includes(this.state.userName);
     const rule3 = !!this.state.password.match(/[A-Z]/g) && !!this.state.password.match(/[a-z]/g);
+    const rule4 = this.state.email.includes('@');
 
     this.setState({
-      validation : rule1 && rule2 && rule3
+      validation : rule1 && rule2 && rule3 && rule4
     })
   };
 
 
   render() {
-    const {userName, password , list} = this.state;
+    const {userName, password, email} = this.state;
 
     return (
       <div>
         <input name="userName" value={userName} onChange={this.handleChange} placeholder="ID"/>
         <input name="password" value={password} onChange={this.handleChange} onKeyUp={this.isSafe} type="password" placeholder="PASSWORD"/>
+        <input name="email" value={email} onChange={this.handleChange} type="email" onKeyUp={this.isSafe} placeholder="E-mail"/>
         <button onClick={this.handleInsert} disabled={!this.state.validation}>추가하기</button>
-        <ul>
-          {list.map(item => {
-            return(
-              <li key={item.id}>아이디는 {item.userName} 비밀번호는 {item.password} 입니다</li>
-            )
-          })}
-        </ul>
       </div>
     );
   }
