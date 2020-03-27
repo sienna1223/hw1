@@ -47,21 +47,18 @@ class App extends Component {
     const rule3 = !!this.state.password.match(/[A-Z]/g) && !!this.state.password.match(/[a-z]/g);
     const rule4 = this.state.email.includes('@');
 
-    this.setState({
-      validation : rule1 && rule2 && rule3 && rule4
-    })
+    return rule1 && rule2 && rule3 && rule4;
   };
 
 
   render() {
     const {userName, password, email} = this.state;
-
     return (
       <div>
         <input name="userName" value={userName} onChange={this.handleChange} placeholder="ID"/>
-        <input name="password" value={password} onChange={this.handleChange} onKeyUp={this.isSafe} type="password" placeholder="PASSWORD"/>
+        <input name="password" value={password} onChange={(e) => {this.handleChange(e); this.isSafe();}} type="password" placeholder="PASSWORD"/>
         <input name="email" value={email} onChange={this.handleChange} type="email" onKeyUp={this.isSafe} placeholder="E-mail"/>
-        <button onClick={this.handleInsert} disabled={!this.state.validation}>추가하기</button>
+        <button onClick={this.handleInsert} disabled={!this.isSafe()}>추가하기</button>
       </div>
     );
   }
